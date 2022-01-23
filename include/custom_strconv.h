@@ -4,6 +4,9 @@
 #error custom type header net included
 #endif
 
+#include <cassert>
+#include <cwchar>
+
 namespace openapi{
 
 static string_t StringT(const char* mbstr)
@@ -81,6 +84,21 @@ static std::string ToStdString(string_t text)
     }
 #endif
     return str;
+}
+
+static string_t StringT(const wchar_t* mbstr)
+{
+    assert(mbstr != nullptr);
+#ifdef OPENAPI_UTF16_STRINGS
+    std::size_t size = std::wcslen(mbstr);
+    string_t res = std::make_shared<wchar_t[]>(size+1);
+    wcsncpy(res.get(), mbstr,size);
+    res[size] = L'\0';
+    return res;
+#else  // OPENAPI_UTF16_STRINGS
+#error not supported
+    return ToStdString(std::wstring(mbstr));
+#endif // OPENAPI_UTF16_STRINGS     
 }
 
 }

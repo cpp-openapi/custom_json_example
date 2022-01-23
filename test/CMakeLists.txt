@@ -6,6 +6,11 @@ file(GLOB SOURCES
 # strip file extension
 foreach(test_file ${SOURCES})
 get_filename_component(test_name ${test_file} NAME_WE)
+
+# if(NOT ${test_name} STREQUAL "openapi_json2_test")
+#     continue()
+# endif()
+
 add_executable(${test_name} ${test_file})
 
 # custom json
