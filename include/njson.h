@@ -5,10 +5,10 @@
 #include <nlohmann/json.hpp>
 #include <memory>
 
-class NlohmannJson
+class CJson
 {
 public:
-    NlohmannJson(): _j() { }
+    CJson(): _j() { }
 
     void Parse(const openapi::string_t &data);
 
@@ -37,29 +37,29 @@ public:
     void Set(T val);
 
 private:
-    NlohmannJson(nlohmann::json j): _j(j) { }
+    CJson(nlohmann::json j): _j(j) { }
     nlohmann::json _j;
 };
 
 template<typename T>
-openapi::string_t NlohmannJson::Serialize(T val)
+openapi::string_t CJson::Serialize(T val)
 {
-    NlohmannJson j;
+    CJson j;
     j.Set(val);
     return j.ToString();
 }
 
 template<typename T>
-T NlohmannJson::Deserialize(const openapi::string_t &data)
+T CJson::Deserialize(const openapi::string_t &data)
 {
-    NlohmannJson j;
+    CJson j;
     j.Parse(data);
     return j.Get<T>();
 }
 
 // T is primitive or vector or deserializable
 template<typename T>
-T NlohmannJson::Get() const
+T CJson::Get() const
 {
     T i;
     if constexpr (is_optional<T>::value)
@@ -97,7 +97,7 @@ T NlohmannJson::Get() const
         // traverse array
         for (nlohmann::json::const_iterator it = this->_j.begin(); it != this->_j.end(); ++it)
         {
-            NlohmannJson item(*it);
+            CJson item(*it);
             i.push_back(item.Get<V>());
         }
     }
@@ -118,7 +118,7 @@ T NlohmannJson::Get() const
 
 
 template<typename T>
-T NlohmannJson::GetMember(const openapi::string_t &key) const
+T CJson::GetMember(const openapi::string_t &key) const
 {
     if (!this->HasKey(key))
     {
@@ -126,13 +126,13 @@ T NlohmannJson::GetMember(const openapi::string_t &key) const
     }
 
     nlohmann::json inner = this->_j.at(openapi::ToStdString(key));
-    NlohmannJson j2;
+    CJson j2;
     j2._j = inner;
     return j2.Get<T>();
 }
 
 template<typename T>
-void NlohmannJson::Set(T val)
+void CJson::Set(T val)
 {
     if constexpr(is_optional<T>::value)
     {
@@ -150,7 +150,7 @@ void NlohmannJson::Set(T val)
     {
         this->_j = openapi::ToStdString(val);
     }
-    else if constexpr(std::is_same<T, NlohmannJson>::value)
+    else if constexpr(std::is_same<T, CJson>::value)
     {
         this->_j = val._j;
     }
@@ -158,7 +158,7 @@ void NlohmannJson::Set(T val)
     {
         for(auto & e : val)
         {
-            NlohmannJson item;
+            CJson item;
             item.Set(e);
             this->_j.push_back(item._j);
         }
@@ -168,13 +168,13 @@ void NlohmannJson::Set(T val)
         // TODO:
         if constexpr (is_shared_ptr<T>::value == true)
         {
-            NlohmannJson i;
+            CJson i;
             val->ToJSON(i);
             this->_j = i._j;
         }
         else
         {
-            NlohmannJson i;
+            CJson i;
             val.ToJSON(i);
             this->_j = i._j;
         }
@@ -183,9 +183,9 @@ void NlohmannJson::Set(T val)
 
 
 template<typename T>
-void NlohmannJson::AddMember(const openapi::string_t &key, T val)
+void CJson::AddMember(const openapi::string_t &key, T val)
 {
-    NlohmannJson jVal;
+    CJson jVal;
     jVal.Set(val);
     this->_j[openapi::ToStdString(key)] = jVal._j;
 }

@@ -4,6 +4,6 @@
 #endif
 
 #include "njson.h"
-typedef NlohmannJson Json;
+typedef CJson Json;
 
 #include "json_test.cpp"
