@@ -3,13 +3,15 @@ project(openapi_custom_json_example VERSION 0.0.1 LANGUAGES CXX)
 
 cmake_minimum_required(VERSION 3.14)
 
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 20) # shared pointer for []char
 
 message(STATUS "Fetching openapi-runtime")
 include(FetchContent)
 FetchContent_Declare(openapi_runtime
   GIT_REPOSITORY https://github.com/cpp-openapi/runtime.git
-  GIT_TAG a5b93b52e66c7c42e0c6eb4926247f6e0ceeea1b)
+  GIT_TAG 8770ca0c4c152539b8acb18f8fcc17fb15cae5f5)
+# only support wchar for now
+set(OPENAPI_UTF16_STRINGS ON CACHE BOOL "" FORCE)
 FetchContent_GetProperties(openapi_runtime)
 if(NOT json_POPULATED)
   FetchContent_Populate(openapi_runtime)
