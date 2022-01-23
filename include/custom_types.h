@@ -20,7 +20,7 @@ typedef std::shared_ptr<wchar_t[]> string_t;
 
 #define OPENAPI_LITERAL(x) #x
 
-static_assert(false, "not supported yet");
+#error not supported yet
 // typedef std::string string_t;
 
 // typedef wchar_t char_t;

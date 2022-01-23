@@ -9,7 +9,7 @@ message(STATUS "Fetching openapi-runtime")
 include(FetchContent)
 FetchContent_Declare(openapi_runtime
   GIT_REPOSITORY https://github.com/cpp-openapi/runtime.git
-  GIT_TAG 8770ca0c4c152539b8acb18f8fcc17fb15cae5f5)
+  GIT_TAG 98cf79fce6e9f9749cf43eae824e30415952ea95)
 # only support wchar for now
 set(OPENAPI_UTF16_STRINGS ON CACHE BOOL "" FORCE)
 FetchContent_GetProperties(openapi_runtime)
