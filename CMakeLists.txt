@@ -3,7 +3,7 @@ project(openapi_custom_json_example VERSION 0.0.1 LANGUAGES CXX)
 
 cmake_minimum_required(VERSION 3.14)
 
-set (CMAKE_CXX_STANDARD 20) # shared pointer for []char
+set (CMAKE_CXX_STANDARD 17)
 
 message(STATUS "Fetching openapi-runtime")
 include(FetchContent)

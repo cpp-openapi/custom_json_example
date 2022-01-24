@@ -3,10 +3,15 @@
 #include "custom_strconv.h"
 #include "openapi/runtime/runtime_types.h"
 
+#include <cstring>
+
 TEST(String, Init)
 {
-    openapi::string_t x = std::make_shared<wchar_t[]>(10);
-    std::memcpy(x.get(), L"hello", sizeof(L"hello"));
+    openapi::string_t x(new wchar_t[10]);
+    //openapi::string_t x = std::make_shared<wchar_t[]>(10);
+    //std::memcpy(x.get(), L"hello", sizeof(L"hello"));
+    wcsncpy(x.get(), L"hello", 6);
+    x.get()[5] = L'\0';
     ASSERT_STREQ(L"hello", x.get());
 }
 

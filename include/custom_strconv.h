@@ -14,7 +14,7 @@ static string_t StringT(const char* mbstr)
     std::size_t size{};
     std::size_t size2{};
     std::mbstate_t state = std::mbstate_t();
-    string_t res = std::make_shared<wchar_t[]>(1);
+    string_t res(new wchar_t[1]);
     res[0] = L'\0';
 #ifdef WIN32 
     // windows we have the safe convert function
@@ -45,8 +45,9 @@ static string_t StringT(const char* mbstr)
 #endif
 
     // copy wstr content to res
-    res = std::make_shared<wchar_t[]>(wstr.size() + 1);
-    wcsncpy(res.get(), wstr.c_str(),wstr.size());
+    // res = std::make_shared<wchar_t[]>(wstr.size() + 1); // gcc has bug for c++20
+    res = std::shared_ptr<wchar_t[]>(new wchar_t[wstr.size() + 1]);
+    wcsncpy(res.get(), wstr.c_str(), wstr.size());
     res[wstr.size()] = L'\0';
     return res;
 }
@@ -91,7 +92,8 @@ static string_t StringT(const wchar_t* mbstr)
     assert(mbstr != nullptr);
 #ifdef OPENAPI_UTF16_STRINGS
     std::size_t size = std::wcslen(mbstr);
-    string_t res = std::make_shared<wchar_t[]>(size+1);
+    string_t res = std::shared_ptr<wchar_t[]>(new wchar_t[size + 1]);
+    // string_t res = std::make_shared<wchar_t[]>(size+1); // gcc has bug for this c++20 feature.
     wcsncpy(res.get(), mbstr,size);
     res[size] = L'\0';
     return res;
