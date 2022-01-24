@@ -1,7 +1,11 @@
 #pragma once
 
+#include "custom_types.h"
 #include "openapi/runtime/runtime_types.h"
-#include "openapi/runtime/strconv.h"
+#include "custom_strconv.h"
+
+// #include "openapi/runtime/strconv.h"
+
 #include <nlohmann/json.hpp>
 #include <memory>
 
@@ -14,6 +18,7 @@ public:
 
     bool HasKey(const openapi::string_t &key) const;
 
+    // bool HasKey(const char* key) const;
 
     openapi::string_t ToString() const;
 
